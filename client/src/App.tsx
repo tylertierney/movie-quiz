@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+const baseUrl = "http://localhost:8080";
+
+interface Question {
+  options: Movie[];
+  answer: Movie | null;
+}
+
+interface Game {
+  questions: Question[];
+}
+
+const generateGame = (movies: Movie[]): Game => {
+  return {
+    questions: Array(10)
+      .fill(null)
+      .map((): Question => {
+        return {
+          options: [],
+          answer: null,
+        };
+      }),
+  };
+};
+
+interface Movie {
+  poster_path: string;
+  title: string;
+  id: number;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [game, setGame] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/api/movies`)
+      .then((res) => res.json())
+      .then((data: { results: Movie[] }) => {
+        setMovies(data.results);
+      });
+  }, []);
+
+  console.log(movies);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {movies.map((movie) => {
+        return (
+          <img
+            src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
+            width={300}
+            height={430}
+          ></img>
+        );
+      })}
+      <pre>{JSON.stringify(movies)}</pre>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,61 +1,127 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-const baseUrl = "http://localhost:8080";
+import { useCallback, useEffect, useState } from "react";
+import StartPage from "./components/StartPage/StartPage";
+import Question from "./components/Question/Question";
+const baseUrl = "https://localhost:8080";
+import styles from "./App.module.css";
 
-interface Question {
-  options: Movie[];
-  answer: Movie | null;
-}
-
-interface Game {
-  questions: Question[];
-}
-
-const generateGame = (movies: Movie[]): Game => {
-  return {
-    questions: Array(10)
-      .fill(null)
-      .map((): Question => {
-        return {
-          options: [],
-          answer: null,
-        };
-      }),
-  };
+const convertGameOptionsToQuery = (gameOptions: GameOptions) => {
+  return Object.entries(gameOptions).reduce(
+    (acc, [key, value]) => acc + `${key}=${value}&`,
+    ""
+  );
 };
 
-interface Movie {
+export type Difficulty = "easy" | "normal" | "hard" | "impossible";
+export type List = "popular-100" | "popular-250" | "popular-500";
+export type Topic = "movies" | "series";
+
+export interface GameOptions {
+  difficulty: Difficulty;
+  list: List;
+  topic: Topic;
+}
+
+export interface IQuestion {
+  options: Movie[];
+  answer: Movie;
+  userAnswer: Movie | null;
+}
+
+export interface IGame extends GameOptions {
+  questions: IQuestion[];
+}
+
+export interface Movie {
   poster_path: string;
   title: string;
   id: number;
 }
 
+const initialGameOptions: GameOptions = {
+  difficulty: "normal",
+  list: "popular-100",
+  topic: "movies",
+};
+
 function App() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [game, setGame] = useState<Movie[]>([]);
+  const [questionIndex, setQuestionIndex] = useState<number | null>(null);
+  const [game, setGame] = useState<IGame>({
+    questions: [],
+    ...initialGameOptions,
+  });
+  const [gameOptions, setGameOptions] =
+    useState<GameOptions>(initialGameOptions);
+  const [gameActive, setGameActive] = useState(false);
+
+  const fetchGame = useCallback(async () => {
+    const res = await fetch(
+      `${baseUrl}/api/game?${convertGameOptionsToQuery(gameOptions)}`
+    );
+    const data: IGame = await res.json();
+    setGame(data);
+    setQuestionIndex(0);
+  }, [gameOptions]);
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/movies`)
-      .then((res) => res.json())
-      .then((data: { results: Movie[] }) => {
-        setMovies(data.results);
-      });
-  }, []);
+    if (gameActive) {
+      fetchGame();
+    }
+  }, [gameActive, fetchGame]);
 
-  console.log(movies);
+  const questions = game.questions;
+
+  const resetGame = () => {
+    setQuestionIndex(null);
+  };
+
+  const answerQuestion = (option: Movie, idx: number) => {
+    setGame((game) => {
+      return {
+        ...game,
+        questions: game.questions.map((question, i) => {
+          if (i === idx) {
+            return { ...question, userAnswer: option };
+          }
+          return question;
+        }),
+      };
+    });
+  };
 
   return (
     <>
-      {movies.map((movie) => {
-        return (
-          <img
-            src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
-            width={300}
-            height={430}
-          ></img>
-        );
-      })}
-      <pre>{JSON.stringify(movies)}</pre>
+      <nav className={styles.nav}>
+        <div className={styles.left}>
+          {questionIndex !== null && (
+            <button onClick={() => resetGame()}>back</button>
+          )}
+        </div>
+        <h1 className={`${styles.h1} ${styles.center}`}>Movie Quiz</h1>
+        <div className={styles.right}></div>
+      </nav>
+      <div className={styles.page}>
+        {questionIndex === null ? (
+          <StartPage
+            gameOptions={gameOptions}
+            setGameActive={setGameActive}
+            setGameOptions={setGameOptions}
+          />
+        ) : (
+          questions.map((_, idx) => {
+            return (
+              <Question
+                setQuestionIndex={setQuestionIndex}
+                answerQuestion={answerQuestion}
+                style={{ display: idx === questionIndex ? "flex" : "none" }}
+                key={idx}
+                game={game}
+                setGame={setGame}
+                questionIndex={idx}
+              />
+            );
+          })
+        )}
+      </div>
     </>
   );
 }

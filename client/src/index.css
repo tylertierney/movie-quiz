@@ -1,5 +1,8 @@
 * {
   font-family: sans-serif;
+  --green: #2cb02c;
+  --red: #ff5c5c;
+  --orange: rgb(245, 158, 11);
 }
 
 h1, h2, h3, h4, h5 ,h6 {

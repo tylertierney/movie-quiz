@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import StartPage from "./components/StartPage/StartPage";
 import Question from "./components/Question/Question";
-const baseUrl = "https://localhost:8080";
 import styles from "./App.module.css";
+import Navbar from "./components/Navbar/Navbar";
+
+const baseUrl = import.meta.env.VITE_API_URL;
+console.log(baseUrl);
 
 const convertGameOptionsToQuery = (gameOptions: GameOptions) => {
   return Object.entries(gameOptions).reduce(
@@ -71,6 +74,8 @@ function App() {
   const questions = game.questions;
 
   const resetGame = () => {
+    setGameActive(false);
+    setGame({ ...initialGameOptions, questions: [] });
     setQuestionIndex(null);
   };
 
@@ -90,7 +95,7 @@ function App() {
 
   return (
     <>
-      <nav className={styles.nav}>
+      {/* <nav className={styles.nav}>
         <div className={styles.left}>
           {questionIndex !== null && (
             <button onClick={() => resetGame()}>back</button>
@@ -98,7 +103,8 @@ function App() {
         </div>
         <h1 className={`${styles.h1} ${styles.center}`}>Movie Quiz</h1>
         <div className={styles.right}></div>
-      </nav>
+      </nav> */}
+      <Navbar questionIndex={questionIndex} resetGame={resetGame} />
       <div className={styles.page}>
         {questionIndex === null ? (
           <StartPage

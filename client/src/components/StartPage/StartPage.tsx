@@ -16,6 +16,7 @@ const StartPage: FC<StartPageProps> = ({
 }) => {
   return (
     <div className={styles.menu}>
+      <h1 className={styles.h1}>Play</h1>
       <label className={styles.label}>
         Topic
         <select

@@ -1,6 +1,4 @@
 * {
-  --green: #2cb02c;
-  --red: #ff5c5c;
   --background: rgb(245, 245, 245);
 }
 
@@ -17,6 +15,7 @@
   width: 300px;
   cursor: pointer;
   text-align: left;
+  color: black;
 
   &:hover {
     background-color: rgb(227, 227, 227);

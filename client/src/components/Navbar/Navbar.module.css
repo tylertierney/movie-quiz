@@ -1,0 +1,33 @@
+.nav {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(211, 211, 211, 0.92);
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+
+  .backButton {
+    color: var(--orange);
+    padding: 0.5rem 0.7rem;
+    background: none;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.2rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--orange) 10%, white);
+
+    }
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+
+    .h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+}

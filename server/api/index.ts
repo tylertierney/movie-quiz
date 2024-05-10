@@ -68,6 +68,7 @@ app.use(
   cors({
     origin: [
       "*",
+      "https://movie-quiz-1.netlify.app",
       "https://localhost:3000",
       "http://localhost:3000",
       "http://192.168.254.32:3000",

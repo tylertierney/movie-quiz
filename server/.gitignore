@@ -131,3 +131,5 @@ dist
 
 src/cert/
 uploads/
+.vercel
+api/cert/

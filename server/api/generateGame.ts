@@ -1,4 +1,4 @@
-import { Movie, Game, Question, GameOptions } from "./api";
+import { Movie, Game, Question, GameOptions } from ".";
 
 export const generateGame = (arr: Movie[], gameOptions: GameOptions) => {
   const game: Game = {

@@ -26,6 +26,6 @@
     "strictPropertyInitialization": false,
     "useDefineForClassFields": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "api/index.ts", "api/generateGame.ts"],
   "exclude": ["node_modules"]
 }

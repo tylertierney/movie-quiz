@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "nodemon -L src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon api/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel-build": "echo hello"
   },
   "author": "",
   "license": "ISC",

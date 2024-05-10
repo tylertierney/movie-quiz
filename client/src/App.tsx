@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar/Navbar";
 import EndPage from "./components/EndPage/EndPage";
 
 const baseUrl = import.meta.env.VITE_API_URL;
-console.log(baseUrl);
 
 const convertGameOptionsToQuery = (gameOptions: GameOptions) => {
   return Object.entries(gameOptions).reduce(
@@ -59,7 +58,7 @@ function App() {
 
   const fetchGame = useCallback(async () => {
     const res = await fetch(
-      `${baseUrl}/api/game?${convertGameOptionsToQuery(gameOptions)}`
+      `${baseUrl}/game?${convertGameOptionsToQuery(gameOptions)}`
     );
     const data: IGame = await res.json();
     setGame(data);

@@ -1,7 +1,12 @@
 import "dotenv/config";
-import { Router } from "express";
+import express from "express";
 const apiKey = process.env.API_KEY;
-import { generateGame, testData } from "./generateGame";
+import { generateGame } from "./generateGame";
+import cors from "cors";
+import https from "http";
+import fs from "fs";
+import path from "path";
+import util from "util";
 
 import { Query } from "express-serve-static-core";
 export interface TypedRequestQuery<T extends Query> extends Express.Request {
@@ -56,13 +61,36 @@ export interface ApiPage {
   total_results: number;
 }
 
-const api = Router();
+const app = express();
+const PORT = (process.env.PORT as number | undefined) || 8080;
 
-api.get("/", (req, res) => {
+app.use(
+  cors({
+    origin: [
+      "*",
+      "https://localhost:3000",
+      "http://localhost:3000",
+      "http://192.168.254.32:3000",
+      "https://192.168.254.32:3000",
+    ],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json("hi from home");
+});
+
+app.get("/api", (req, res) => {
+  console.log("/api was hit");
   res.json("hi from /api");
 });
 
 const baseUrl = `https://api.themoviedb.org/3/discover`;
+
+console.log(process.env.API_READ_ACCESS_TOKEN);
 
 const fetchOptions = {
   method: "GET",
@@ -129,29 +157,33 @@ const shuffleArray = <T>(arr: T[]) => {
   return arr;
 };
 
-api.get("/game", async (req: TypedRequestQuery<GameOptionsQuery>, res) => {
+app.get("/api/game", async (req: TypedRequestQuery<GameOptionsQuery>, res) => {
   const gameOptions = req.query;
-  const { list, difficulty, topic } = gameOptions;
+  const { list, topic } = gameOptions;
 
-  let pageSize = 5;
+  console.log("/api/game was hit");
+
+  // each page from the tmdb api has 20 results
+  // i.e. 5 pages = 100 movies
+  let pageCount = 5;
   if (list === "popular-250") {
-    pageSize = 13;
+    pageCount = 13;
   }
   if (list === "popular-500") {
-    pageSize = 25;
+    pageCount = 25;
   }
 
   let results: Movie[][] = [];
 
   if (topic === "movies") {
     results = await Promise.all(
-      new Array(pageSize)
+      new Array(pageCount)
         .fill(null)
         .map((_, page) => getTopRatedMovies(page + 1))
     );
   } else {
     results = await Promise.all(
-      new Array(pageSize).fill(null).map((_, page) => getTopRatedTv(page + 1))
+      new Array(pageCount).fill(null).map((_, page) => getTopRatedTv(page + 1))
     );
   }
 
@@ -161,4 +193,22 @@ api.get("/game", async (req: TypedRequestQuery<GameOptionsQuery>, res) => {
   res.send(generateGame(shuffledList.slice(0, 40), gameOptions));
 });
 
-export default api;
+//HTTP
+app.listen(PORT, () => {
+  console.log(`Server started at http://localhost:${PORT}`);
+});
+
+//HTTPS
+
+// console.log(path.join(__dirname, "cert", "key.pem"));
+// const sslServer = https.createServer(
+//   {
+//     key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
+//     cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
+//   } as https.ServerOptions,
+//   app
+// );
+
+// sslServer.listen(PORT, () => console.log(`Secure server on port ${PORT}`));
+
+export default app;

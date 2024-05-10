@@ -40,7 +40,10 @@ const Question: FC<QuestionProps> = ({
   const triggerAnswer = (option: Movie, questionIndex: number): void => {
     answerQuestion(option, questionIndex);
     setTimeout(() => {
-      setQuestionIndex((prev) => (prev === null ? -1 : prev) + 1);
+      setQuestionIndex((prev) => {
+        if (prev === null) return -1;
+        return prev + 1;
+      });
     }, 2400);
   };
 
@@ -49,10 +52,10 @@ const Question: FC<QuestionProps> = ({
     difficulty: Difficulty
   ): string => {
     if (userAnswer) return "blur(0px)";
-    if (difficulty === "easy") return "blur(14px)";
-    if (difficulty === "normal") return "blur(28px)";
-    if (difficulty === "hard") return "blur(56px)";
-    if (difficulty === "impossible") return "blur(70px)";
+    if (difficulty === "easy") return "blur(16px)";
+    if (difficulty === "normal") return "blur(32px)";
+    if (difficulty === "hard") return "blur(64px)";
+    if (difficulty === "impossible") return "blur(48px) grayscale(75%)";
     return "blur(0px)";
   };
 

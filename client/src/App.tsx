@@ -3,6 +3,7 @@ import StartPage from "./components/StartPage/StartPage";
 import Question from "./components/Question/Question";
 import styles from "./App.module.css";
 import Navbar from "./components/Navbar/Navbar";
+import EndPage from "./components/EndPage/EndPage";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 console.log(baseUrl);
@@ -95,15 +96,6 @@ function App() {
 
   return (
     <>
-      {/* <nav className={styles.nav}>
-        <div className={styles.left}>
-          {questionIndex !== null && (
-            <button onClick={() => resetGame()}>back</button>
-          )}
-        </div>
-        <h1 className={`${styles.h1} ${styles.center}`}>Movie Quiz</h1>
-        <div className={styles.right}></div>
-      </nav> */}
       <Navbar questionIndex={questionIndex} resetGame={resetGame} />
       <div className={styles.page}>
         {questionIndex === null ? (
@@ -126,6 +118,9 @@ function App() {
               />
             );
           })
+        )}
+        {questionIndex === questions.length && (
+          <EndPage resetGame={resetGame} game={game} />
         )}
       </div>
     </>

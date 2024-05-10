@@ -19,14 +19,6 @@ const Stepper: FC<StepperProps> = ({ questionIndex, game }) => {
   );
 
   const dots = answers.map((correct, i) => {
-    // if (correct === true)
-    //   return <div key={i} className={`${styles.dot}  ${styles.correct}`}></div>;
-    // if (correct === false)
-    //   return (
-    //     <div key={i} className={`${styles.dot} ${styles.incorrect}`}></div>
-    //   );
-    // return <div key={i} className={`${styles.dot}`}></div>;
-
     let className = `${styles.dot}`;
     if (questionIndex === i) {
       className += ` ${styles.current}`;

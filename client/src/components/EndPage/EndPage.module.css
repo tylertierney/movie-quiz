@@ -1,0 +1,44 @@
+.container {
+  align-self: flex-start;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  
+
+  .h1 {
+    font-size: 6rem;
+    color: var(--orange);
+    margin-bottom: 2rem;
+  }
+
+  .p {
+    font-style: italic;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-family:'Times New Roman', Times, serif;
+    font-weight: bold;
+    margin-top: 0;
+  }
+
+  .button {
+    background-color: var(--orange);
+    padding: 1rem;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    align-self: flex-start;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--dark-orange);
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .container {
+    max-width: 560px;
+  }
+}

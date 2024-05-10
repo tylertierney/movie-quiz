@@ -9,4 +9,5 @@ export default defineConfig({
     port: 3000,
   },
   envDir: "./environments",
+  base: "/movie-quiz/",
 });

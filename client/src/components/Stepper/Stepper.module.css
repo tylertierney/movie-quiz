@@ -29,14 +29,15 @@
   width: 9px;
   height: 9px;
   background-color: rgba(0, 0, 0, 0.204);
+  background-color: color-mix(in hsl, var(--background) 50%, var(--text-color));
   border-radius: 100%;
   --green: #26da26;
   --red: #ff5b5b;
 
   &.current {
-    background-color: black;
+    background-color: var(--text-color);
     border: 4px solid;
-    border-color: black;
+    border-color: var(--text-color)
   }
 
   &.correct {

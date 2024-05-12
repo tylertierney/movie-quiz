@@ -1,18 +1,41 @@
-* {
+body {
   font-family: sans-serif;
+  --background: white;
   --green: #2cb02c;
   --red: #ff5c5c;
   --orange: rgb(245, 158, 11);
   --dark-orange: rgb(217, 119, 6);
+  --text-color: black;
+  --btn-background: rgb(245, 245, 245);
 }
 
 h1, h2, h3, h4, h5 ,h6 {
-  font-family:'Times New Roman', Times, serif
+  font-family:'Times New Roman', Times, serif;
+  color: var(--text-color);
+}
+
+p, label, span {
+  color: var(--text-color)
 }
 
 body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  background-color: var(--background);
+}
+
+body.dark-theme {
+  --text-color: white;
+    --background: black;
+    --btn-background: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --text-color: white;
+    --background: black;
+    --btn-background: #080808;
+  }
 }
 

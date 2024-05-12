@@ -14,8 +14,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--orange) 10%, white);
-
+      background-color: color-mix(in hsl, var(--orange) 10%, transparent);
     }
   }
 
@@ -27,6 +26,20 @@
       margin: 0;
       font-size: 1.5rem;
       font-weight: bold;
+    }
+  }
+
+  .right {
+    display: flex;
+    justify-content: flex-end;
+
+    .themeButton {
+      background: none;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
     }
   }
 

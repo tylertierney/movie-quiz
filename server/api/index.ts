@@ -91,8 +91,6 @@ app.get("/api", (req, res) => {
 
 const baseUrl = `https://api.themoviedb.org/3/discover`;
 
-console.log(process.env.API_READ_ACCESS_TOKEN);
-
 const fetchOptions = {
   method: "GET",
   headers: {

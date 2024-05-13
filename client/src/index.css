@@ -31,11 +31,3 @@ body.dark-theme {
     --btn-background: black;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    --text-color: white;
-    --background: black;
-    --btn-background: #080808;
-  }
-}
-

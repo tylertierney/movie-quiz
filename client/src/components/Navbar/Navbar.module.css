@@ -40,6 +40,9 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
+      color: var(--text-color);
+      fill: var(--text-color);
+      stroke: var(--text-color);
     }
   }
 

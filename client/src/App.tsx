@@ -47,6 +47,7 @@ const initialGameOptions: GameOptions = {
 };
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [questionIndex, setQuestionIndex] = useState<number | null>(null);
   const [game, setGame] = useState<IGame>({
     questions: [],
@@ -57,12 +58,23 @@ function App() {
   const [gameActive, setGameActive] = useState(false);
 
   const fetchGame = useCallback(async () => {
-    const res = await fetch(
-      `${baseUrl}/game?${convertGameOptionsToQuery(gameOptions)}`
-    );
-    const data: IGame = await res.json();
-    setGame(data);
-    setQuestionIndex(0);
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `${baseUrl}/game?${convertGameOptionsToQuery(gameOptions)}`
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error - status: ${res.status}`);
+      }
+      const data: IGame = await res.json();
+      setGame(data);
+      setQuestionIndex(0);
+    } catch (err) {
+      setGameActive(false);
+    }
+
+    setLoading(false);
   }, [gameOptions]);
 
   useEffect(() => {
@@ -102,6 +114,7 @@ function App() {
             gameOptions={gameOptions}
             setGameActive={setGameActive}
             setGameOptions={setGameOptions}
+            loading={loading}
           />
         ) : (
           questions.map((_, idx) => {
